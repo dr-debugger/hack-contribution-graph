@@ -61,15 +61,17 @@ const calculateDate = async (
 };
 const directory = process.cwd();
 
-calculateDate(4, "months", 20)
-  .then((isSuccess) => {
-    console.log(isSuccess);
-    if (isSuccess) {
-      return exec(`sh push.sh a`, { shell: true });
-    }
-  })
-  .then((data) => {
-    console.log(data);
+const main = async (substractNum, substractType, commitNum) => {
+  const isSuccess = await calculateDate(substractNum, substractType, commitNum);
+  if (isSuccess) {
+    await exec(`sh push.sh a`, { shell: true });
+  }
+  return Promise.resolve("succesfully commited and pushed.");
+};
+
+main(4, "months", 20)
+  .then((result) => {
+    console.log(result);
   })
   .catch((err) => console.log(err));
 
