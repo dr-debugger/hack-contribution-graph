@@ -71,26 +71,49 @@ const calculateDate = async (
 };
 const directory = process.cwd();
 
-const main = async (substractNum, substractType, commitNum) => {
+const main = async (substractNum, substractType, commitNum, defaultBranch) => {
   const isSuccess = await calculateDate(substractNum, substractType, commitNum);
   if (isSuccess) {
-    await exec(`sh push.sh a`, { shell: true });
+    await exec(`sh push.sh ${defaultBranch}`, { shell: true });
+    return Promise.resolve("succesfully commited and pushed.");
   }
-  return Promise.resolve("succesfully commited and pushed.");
+  return Promise.resolve("oooppps failed !");
 };
-
-main(5, "months", 50)
-  .then((result) => {
-    console.log(result);
-  })
-  .catch((err) => console.log(err));
 
 (async () => {
   try {
     commitNum = await PROMT("How much commit you wanna make on past: ");
-    if (isNaN(commitNum)) {
-      throw Error("number cant be a non integer!");
+    substractType = await PROMT(
+      "What is your substractio type? [please select between days/months/weeks/years]: "
+    );
+    substractNum = await PROMT(
+      `How much ${substractType} you wanna substract? : `
+    );
+    defaultBranch = await PROMT("whats's your default branch? : ");
+
+    const conditions = [
+      isNaN(commitNum),
+      isNaN(substractNum),
+      !acceptedTypes.includes(substractType),
+      (+substractNum > 1 || +substractNum < 1) && substractType === "years",
+      +substractNum > 12 && substractType === "months",
+      +substractNum > 52 && substractType === "weeks",
+      +substractNum > 365 && substractType === "days",
+      parseInt(commitNum) < 1 || parseInt(substractNum) < 1,
+    ];
+
+    if (conditions.includes(true)) {
+      throw Error("Invalid Input!");
     }
+
+    const result = await main(
+      +substractNum,
+      substractType,
+      +commitNum,
+      defaultBranch
+    );
+    console.log(result);
+    READ_QUESTION.close();
   } catch (err) {
     console.log(err);
     READ_QUESTION.close();
