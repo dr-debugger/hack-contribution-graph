@@ -1,4 +1,5 @@
 #! /bin/bash
+
 pwd=$(pwd)
 cd $pwd
 branch=$1
