@@ -1,10 +1,21 @@
 const process = require("process");
-const moment = require("moment");
 const fs = require("fs").promises;
 const path = require("path");
+const readline = require("readline");
 const random = require("random");
+const moment = require("moment");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
+
+const READ_QUESTION = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+const PROMT = (query) => {
+  return new Promise((resolve) => READ_QUESTION.question(query, resolve));
+};
+let substractNum, substractType, commitNum, defaultBranch;
+const acceptedTypes = ["months", "weeks", "years", "days"];
 
 async function mekeComit(date) {
   await exec(`sh commit.sh ${date} ${date}`, { shell: true });
@@ -24,7 +35,6 @@ const commitLoop = async (fromWeek, ultimateDate, array) => {
   return Promise.resolve(true);
 };
 
-const acceptedTypes = ["months", "weeks", "years", "days"];
 const calculateDate = async (
   substractNum,
   substractType,
@@ -74,6 +84,20 @@ main(5, "months", 50)
     console.log(result);
   })
   .catch((err) => console.log(err));
+
+(async () => {
+  try {
+    commitNum = await PROMT("How much commit you wanna make on past: ");
+    if (isNaN(commitNum)) {
+      throw Error("number cant be a non integer!");
+    }
+  } catch (err) {
+    console.log(err);
+    READ_QUESTION.close();
+  }
+})();
+
+READ_QUESTION.on("close", () => process.exit(0));
 
 process.on("uncaughtException", (error) => {
   console.log("uncaughtException error: ", error.message);
