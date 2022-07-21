@@ -11,11 +11,11 @@ async function mekeComit(date) {
   return Promise.resolve(true);
 }
 
-const commitLoop = async (fromWeek, statDate, array) => {
+const commitLoop = async (fromWeek, ultimateDate, array) => {
   for (let data of array) {
     const week = random.int(fromWeek, 51);
     const day = random.int(0, 6);
-    const date = moment(statDate).add(week, "w").add(day, "d").format();
+    const date = moment(ultimateDate).add(week, "w").add(day, "d").format();
     console.log(date);
     await fs.writeFile(path.join(__dirname, "write.txt"), date);
     await mekeComit(date);
@@ -43,7 +43,7 @@ const calculateDate = async (
     throw Error("Invalid Input!");
   }
 
-  const ultimatePrevDate = moment(fromDate).subtract(1, "years");
+  const ultimatePrevDate = moment(fromDate).subtract(1, "years").add(1, "d");
   const dateFromStart = moment(fromDate).subtract(substractNum, substractType);
 
   const differnt = moment(dateFromStart).diff(moment(ultimatePrevDate), "days");
@@ -54,7 +54,7 @@ const calculateDate = async (
 
   const result = await commitLoop(
     actualStartingWeek,
-    dateFromStart,
+    ultimatePrevDate,
     newArrFromNum
   );
   return Promise.resolve(result);
