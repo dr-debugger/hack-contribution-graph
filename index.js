@@ -69,7 +69,7 @@ const main = async (substractNum, substractType, commitNum) => {
   return Promise.resolve("succesfully commited and pushed.");
 };
 
-main(4, "months", 20)
+main(5, "months", 50)
   .then((result) => {
     console.log(result);
   })
