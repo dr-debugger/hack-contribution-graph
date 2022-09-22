@@ -41,18 +41,6 @@ const calculateDate = async (
   commitNum,
   fromDate = new Date()
 ) => {
-  const conditions = [
-    substractNum > 1 && substractNum < 1 && substractType === "years",
-    substractNum > 12 && substractNum === "months",
-    substractNum > 52 && substractNum === "weeks",
-    substractNum > 365 && substractNum === "days",
-    !acceptedTypes.includes(substractType),
-  ];
-
-  if (conditions.includes(true)) {
-    throw Error("Invalid Input!");
-  }
-
   const ultimatePrevDate = moment(fromDate).subtract(1, "years").add(1, "d");
   const dateFromStart = moment(fromDate).subtract(substractNum, substractType);
 
