@@ -62,7 +62,7 @@ const calculateDate = async (
 const directory = process.cwd();
 
 calculateDate(4, "months", 20)
-  .then(() => {
+  .then((isSuccess) => {
     console.log(isSuccess);
     if (isSuccess) {
       return exec(`sh push.sh a`, { shell: true });
