@@ -16,6 +16,7 @@ const commitLoop = async (fromWeek, statDate, array, br) => {
     const week = random.int(fromWeek, 51);
     const day = random.int(0, 6);
     const date = moment(statDate).add(week, "w").add(day, "d").format();
+    console.log(date);
     await fs.writeFile(path.join(__dirname, "write.txt"), date);
     await mekeComit(br, date);
   }
@@ -62,7 +63,7 @@ const calculateDate = async (
 };
 const directory = process.cwd();
 
-calculateDate(2, "months", 200, "a").then((isSuccess) => {
+calculateDate(2, "months", 20, "a").then((isSuccess) => {
   console.log(isSuccess);
 });
 
