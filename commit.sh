@@ -1,12 +1,10 @@
 #! /bin/bash
 
-dir=$1
-commitMsg=$2
-branch=$3
-date=$4
+commitMsg=$1
+branch=$2
+date=$3
 
-cd /
-cd $dir
-
+pwd=$(pwd)
+cd $pwd
 git add .
 git commit --date=$date -m $commitMsg

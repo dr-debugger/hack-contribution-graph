@@ -7,7 +7,7 @@ const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 
 async function mekeComit(dir, br, date) {
-  await exec(`sh commit.sh ${dir} ${date} ${br} ${date}`, { shell: true });
+  await exec(`sh commit.sh ${date} ${br} ${date}`, { shell: true });
   return Promise.resolve(true);
 }
 
