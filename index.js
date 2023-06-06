@@ -6,18 +6,18 @@ const random = require("random");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 
-async function mekeComit(dir, br, date) {
+async function mekeComit(br, date) {
   await exec(`sh commit.sh ${date} ${br} ${date}`, { shell: true });
   return Promise.resolve(true);
 }
 
-const commitLoop = async (fromWeek, statDate, array, dir, br) => {
+const commitLoop = async (fromWeek, statDate, array, br) => {
   for (let data of array) {
     const week = random.int(fromWeek, 51);
     const day = random.int(0, 6);
     const date = moment(statDate).add(week, "w").add(day, "d").format();
     await fs.writeFile(path.join(__dirname, "write.txt"), date);
-    await mekeComit(dir, br, date);
+    await mekeComit(br, date);
   }
 
   return Promise.resolve(true);
@@ -28,7 +28,6 @@ const calculateDate = async (
   substractNum,
   substractType,
   commitNum,
-  dir,
   branch,
   fromDate = new Date()
 ) => {
@@ -57,15 +56,15 @@ const calculateDate = async (
     actualStartingWeek,
     dateFromStart,
     newArrFromNum,
-    dir,
     branch
   );
   return result;
 };
 const directory = process.cwd();
-const isSuccess = calculateDate(2, "months", 30, directory, "a");
 
-console.log(isSuccess);
+calculateDate(2, "months", 200, "a").then((isSuccess) => {
+  console.log(isSuccess);
+});
 
 process.on("uncaughtException", (error) => {
   console.log("uncaughtException error: ", error.message);
