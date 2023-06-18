@@ -10,4 +10,3 @@ cd $dir
 
 git add .
 git commit --date=$date -m $commitMsg
-git push origin $branch

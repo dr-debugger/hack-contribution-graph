@@ -3,20 +3,12 @@ const moment = require("moment");
 const fs = require("fs").promises;
 const path = require("path");
 const random = require("random");
-// const util = require("util");
-// const exec = util.promisify(require("child_process").exec);
-const { exec } = require("child_process");
+const util = require("util");
+const exec = util.promisify(require("child_process").exec);
 
-function mekeComit(dir, br, date) {
-  return new Promise((res) => {
-    exec(
-      `sh commit.sh ${dir} ${date} ${br} ${date}`,
-      { shell: true },
-      (err, stdout, stderr) => {
-        res(true);
-      }
-    );
-  });
+async function mekeComit(dir, br, date) {
+  await exec(`sh commit.sh ${dir} ${date} ${br} ${date}`, { shell: true });
+  return Promise.resolve(true);
 }
 
 const commitLoop = async (fromWeek, statDate, array, dir, br) => {
@@ -27,6 +19,8 @@ const commitLoop = async (fromWeek, statDate, array, dir, br) => {
     await fs.writeFile(path.join(__dirname, "write.txt"), date);
     await mekeComit(dir, br, date);
   }
+
+  return Promise.resolve(true);
 };
 
 const acceptedTypes = ["months", "weeks", "years", "days"];
