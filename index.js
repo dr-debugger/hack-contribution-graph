@@ -58,7 +58,7 @@ const calculateDate = async (
     newArrFromNum,
     branch
   );
-  return result;
+  return Promise.resolve(result);
 };
 const directory = process.cwd();
 
